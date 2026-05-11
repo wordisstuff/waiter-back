@@ -1,0 +1,85 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum TableStatus {
+  FREE
+  RESERVED
+  OCCUPIED
+  CLEANING
+}
+
+enum SessionStatus {
+  ACTIVE
+  CLOSED
+}
+
+enum SenderType {
+  CUSTOMER
+  AI
+  WAITER
+}
+
+model Restaurant {
+  id        String   @id @default(uuid())
+  name      String
+  slug      String   @unique
+  createdAt DateTime @default(now())
+
+  tables   RestaurantTable[]
+  sessions ChatSession[]
+}
+
+model RestaurantTable {
+  id           String      @id @default(uuid())
+  restaurantId String
+
+  number       Int
+  seats        Int
+  status       TableStatus @default(FREE)
+
+  currentSessionId String?
+
+  posX         Float?
+  posY         Float?
+  qrCodeUrl    String?
+
+  createdAt    DateTime @default(now())
+
+  restaurant Restaurant @relation(fields: [restaurantId], references: [id])
+  sessions   ChatSession[]
+}
+
+model ChatSession {
+  id           String        @id @default(uuid())
+  restaurantId String
+  tableId      String
+
+  partySize    Int
+  status       SessionStatus @default(ACTIVE)
+
+  startedAt    DateTime @default(now())
+  closedAt     DateTime?
+
+  restaurant Restaurant      @relation(fields: [restaurantId], references: [id])
+  table      RestaurantTable @relation(fields: [tableId], references: [id])
+
+  messages ChatMessage[]
+}
+
+model ChatMessage {
+  id        String     @id @default(uuid())
+  sessionId String
+
+  sender    SenderType
+  content   String
+
+  createdAt DateTime @default(now())
+
+  session ChatSession @relation(fields: [sessionId], references: [id])
+}
