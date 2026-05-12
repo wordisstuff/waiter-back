@@ -12,6 +12,7 @@ export class N8nService {
     tableNumber: number;
     partySize: number;
     message: string;
+    menu: any;
   }) {
     if (!this.webhookUrl) {
       throw new Error('N8N_AI_WAITER_WEBHOOK_URL is not set');

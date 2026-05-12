@@ -2,13 +2,15 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { SendMessageDto } from './dto/send-message.dto';
 import { SenderType } from '@prisma/client';
-import { N8nService } from '../n8n/n8n.service';
+import { MenuService } from 'src/menu/menu.service';
+import { AiService } from 'src/ai/ai.service';
 
 @Injectable()
 export class ChatService {
   constructor(
     private readonly prisma: PrismaService,
-    private readonly n8nService: N8nService,
+    private readonly aiService: AiService,
+    private readonly menuService: MenuService,
   ) {}
 
   async sendMessage(dto: SendMessageDto) {
@@ -32,19 +34,30 @@ export class ChatService {
       },
     });
 
-    const n8nResponse = await this.n8nService.sendMessage({
-      sessionId: session.id,
-      restaurantId: session.restaurantId,
-      tableId: session.tableId,
+    const menu = this.menuService.getMenu();
+
+    const recentMessages = await this.prisma.chatMessage.findMany({
+      where: { sessionId: session.id },
+      orderBy: { createdAt: 'desc' },
+      take: 8,
+    });
+
+    const history: { role: 'user' | 'assistant'; content: string }[] =
+      recentMessages.reverse().map((message) => ({
+        role: message.sender === SenderType.CUSTOMER ? 'user' : 'assistant',
+        content: message.content,
+      }));
+
+    const aiResponse = await this.aiService.askWaiter({
+      message: dto.message,
       tableNumber: session.table.number,
       partySize: session.partySize,
-      message: dto.message,
+      history,
+      menu,
     });
 
     const answer =
-      n8nResponse.answer ||
-      n8nResponse.content ||
-      'Sorry, I could not process your request.';
+      aiResponse.answer || 'Sorry, I could not process your request.';
 
     const aiMessage = await this.prisma.chatMessage.create({
       data: {
@@ -57,6 +70,7 @@ export class ChatService {
     return {
       sessionId: session.id,
       answer: aiMessage.content,
+      recommendedItemIds: aiResponse.recommendedItemIds ?? [],
     };
   }
 

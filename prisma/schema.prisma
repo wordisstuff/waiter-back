@@ -7,6 +7,14 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum OrderStatus {
+  CONFIRMED
+  COOKING
+  READY
+  SERVED
+  CANCELED
+}
+
 enum TableStatus {
   FREE
   RESERVED
@@ -69,6 +77,8 @@ model ChatSession {
   restaurant Restaurant      @relation(fields: [restaurantId], references: [id])
   table      RestaurantTable @relation(fields: [tableId], references: [id])
 
+  orders Order[]
+
   messages ChatMessage[]
 }
 
@@ -82,4 +92,27 @@ model ChatMessage {
   createdAt DateTime @default(now())
 
   session ChatSession @relation(fields: [sessionId], references: [id])
+}
+
+model Order {
+  id        String      @id @default(uuid())
+  sessionId String
+  status    OrderStatus @default(CONFIRMED)
+  total     Float
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
+
+  session ChatSession @relation(fields: [sessionId], references: [id])
+  items   OrderItem[]
+}
+
+model OrderItem {
+  id       String @id @default(uuid())
+  orderId  String
+  menuItemId String
+  name     String
+  price    Float
+  quantity Int
+
+  order Order @relation(fields: [orderId], references: [id])
 }
