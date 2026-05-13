@@ -12,7 +12,7 @@
     "calories": 420,
     "portion": "450g",
     "available": true,
-    "imageUrl": "/menu/borsch-pampushky.webp"
+    "imageUrl": "/menu/borsch-pampushky.png"
   },
   {
     "id": "varenyky-potato",
@@ -27,7 +27,7 @@
     "calories": 520,
     "portion": "300g",
     "available": true,
-    "imageUrl": "/menu/varenyky-potato.webp"
+    "imageUrl": "/menu/varenyky-potato.png"
   },
   {
     "id": "varenyky-cherry",
@@ -42,7 +42,7 @@
     "calories": 470,
     "portion": "280g",
     "available": true,
-    "imageUrl": "/menu/varenyky-cherry.webp"
+    "imageUrl": "/menu/varenyky-cherry.png"
   },
   {
     "id": "holubtsi",
@@ -57,7 +57,7 @@
     "calories": 560,
     "portion": "350g",
     "available": true,
-    "imageUrl": "/menu/holubtsi.webp"
+    "imageUrl": "/menu/holubtsi.png"
   },
   {
     "id": "deruny",
@@ -72,7 +72,7 @@
     "calories": 610,
     "portion": "320g",
     "available": true,
-    "imageUrl": "/menu/deruny.webp"
+    "imageUrl": "/menu/deruny.png"
   },
   {
     "id": "kulish",
@@ -87,7 +87,7 @@
     "calories": 480,
     "portion": "400g",
     "available": true,
-    "imageUrl": "/menu/kulish.webp"
+    "imageUrl": "/menu/kulish.png"
   },
   {
     "id": "banosh",
@@ -102,7 +102,7 @@
     "calories": 720,
     "portion": "330g",
     "available": true,
-    "imageUrl": "/menu/banosh.webp"
+    "imageUrl": "/menu/banosh.png"
   },
   {
     "id": "halushky",
@@ -117,7 +117,7 @@
     "calories": 530,
     "portion": "300g",
     "available": true,
-    "imageUrl": "/menu/halushky.webp"
+    "imageUrl": "/menu/halushky.png"
   },
   {
     "id": "kholodets",
@@ -132,7 +132,7 @@
     "calories": 340,
     "portion": "250g",
     "available": true,
-    "imageUrl": "/menu/kholodets.webp"
+    "imageUrl": "/menu/kholodets.png"
   },
   {
     "id": "homemade-sausage",
@@ -147,7 +147,7 @@
     "calories": 760,
     "portion": "280g",
     "available": true,
-    "imageUrl": "/menu/homemade-sausage.webp"
+    "imageUrl": "/menu/homemade-sausage.png"
   },
   {
     "id": "kruchenyky",
@@ -162,7 +162,7 @@
     "calories": 590,
     "portion": "320g",
     "available": true,
-    "imageUrl": "/menu/kruchenyky.webp"
+    "imageUrl": "/menu/kruchenyky.png"
   },
   {
     "id": "nalysnyky",
@@ -177,7 +177,7 @@
     "calories": 510,
     "portion": "260g",
     "available": true,
-    "imageUrl": "/menu/nalysnyky.webp"
+    "imageUrl": "/menu/nalysnyky.png"
   },
   {
     "id": "plachynda",
@@ -192,7 +192,7 @@
     "calories": 540,
     "portion": "240g",
     "available": true,
-    "imageUrl": "/menu/plachynda.webp"
+    "imageUrl": "/menu/plachynda.png"
   },
   {
     "id": "bograch",
@@ -207,7 +207,7 @@
     "calories": 490,
     "portion": "450g",
     "available": true,
-    "imageUrl": "/menu/bograch.webp"
+    "imageUrl": "/menu/bograch.png"
   },
   {
     "id": "pickled-vegetables",
@@ -222,7 +222,7 @@
     "calories": 110,
     "portion": "200g",
     "available": true,
-    "imageUrl": "/menu/pickled-vegetables.webp"
+    "imageUrl": "/menu/pickled-vegetables.png"
   },
   {
     "id": "uzvar",
@@ -237,7 +237,7 @@
     "calories": 140,
     "portion": "350ml",
     "available": true,
-    "imageUrl": "/menu/uzvar.webp"
+    "imageUrl": "/menu/uzvar.png"
   },
   {
     "id": "syrnyky",
@@ -252,7 +252,7 @@
     "calories": 480,
     "portion": "250g",
     "available": true,
-    "imageUrl": "/menu/syrnyky.webp"
+    "imageUrl": "/menu/syrnyky.png"
   },
   {
     "id": "nalyvka",
@@ -267,6 +267,6 @@
     "calories": 210,
     "portion": "100ml",
     "available": true,
-    "imageUrl": "/menu/nalyvka.webp"
+    "imageUrl": "/menu/nalyvka.png"
   }
 ]

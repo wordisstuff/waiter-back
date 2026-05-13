@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, Patch, Post } from '@nestjs/common';
 import { ChatService } from './chat.service';
 import { SendMessageDto } from './dto/send-message.dto';
 
@@ -14,5 +14,10 @@ export class ChatController {
   @Get('sessions/:sessionId/messages')
   getMessages(@Param('sessionId') sessionId: string) {
     return this.chatService.getMessages(sessionId);
+  }
+
+  @Patch('sessions/:sessionId/close')
+  closeSession(@Param('sessionId') sessionId: string) {
+    return this.chatService.closeSession(sessionId);
   }
 }

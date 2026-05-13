@@ -8,6 +8,7 @@ datasource db {
 }
 
 enum OrderStatus {
+  DRAFT
   CONFIRMED
   COOKING
   READY
@@ -97,8 +98,14 @@ model ChatMessage {
 model Order {
   id        String      @id @default(uuid())
   sessionId String
+
   status    OrderStatus @default(CONFIRMED)
-  total     Float
+
+  total     Float       @default(0)
+
+  estimatedMinutes Int?      // наприклад 25 або 30
+  estimatedReadyAt DateTime? // конкретний час готовності
+
   createdAt DateTime    @default(now())
   updatedAt DateTime    @updatedAt
 

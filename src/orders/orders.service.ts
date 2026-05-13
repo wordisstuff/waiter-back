@@ -1,4 +1,9 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
+import { OrderStatus } from '@prisma/client';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateOrderDto } from './dto/create-order.dto';
 
@@ -11,15 +16,31 @@ export class OrdersService {
       throw new BadRequestException('Order items are required');
     }
 
+    const session = await this.prisma.chatSession.findUnique({
+      where: { id: dto.sessionId },
+    });
+
+    if (!session) {
+      throw new NotFoundException('Session not found');
+    }
+
     const total = dto.items.reduce(
       (sum, item) => sum + item.price * item.quantity,
       0,
+    );
+
+    const estimatedMinutes = 25;
+    const estimatedReadyAt = new Date(
+      Date.now() + estimatedMinutes * 60 * 1000,
     );
 
     return this.prisma.order.create({
       data: {
         sessionId: dto.sessionId,
         total,
+        status: OrderStatus.CONFIRMED,
+        estimatedMinutes,
+        estimatedReadyAt,
         items: {
           create: dto.items.map((item) => ({
             menuItemId: item.menuItemId,
@@ -43,6 +64,24 @@ export class OrdersService {
       },
       orderBy: {
         createdAt: 'desc',
+      },
+    });
+  }
+
+  async updateOrderStatus(orderId: string, status: OrderStatus) {
+    const order = await this.prisma.order.findUnique({
+      where: { id: orderId },
+    });
+
+    if (!order) {
+      throw new NotFoundException('Order not found');
+    }
+
+    return this.prisma.order.update({
+      where: { id: orderId },
+      data: { status },
+      include: {
+        items: true,
       },
     });
   }

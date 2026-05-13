@@ -1,7 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { SendMessageDto } from './dto/send-message.dto';
-import { SenderType } from '@prisma/client';
+import { SenderType, SessionStatus, TableStatus } from '@prisma/client';
 import { MenuService } from 'src/menu/menu.service';
 import { AiService } from 'src/ai/ai.service';
 
@@ -79,5 +79,45 @@ export class ChatService {
       where: { sessionId },
       orderBy: { createdAt: 'asc' },
     });
+  }
+  async closeSession(sessionId: string) {
+    const session = await this.prisma.chatSession.findUnique({
+      where: { id: sessionId },
+      include: {
+        table: true,
+      },
+    });
+
+    if (!session) {
+      throw new NotFoundException('Chat session not found');
+    }
+
+    const result = await this.prisma.$transaction(async (tx) => {
+      const closedSession = await tx.chatSession.update({
+        where: { id: sessionId },
+        data: {
+          status: SessionStatus.CLOSED,
+          closedAt: new Date(),
+        },
+      });
+
+      const updatedTable = await tx.restaurantTable.update({
+        where: { id: session.tableId },
+        data: {
+          status: TableStatus.CLEANING,
+        },
+      });
+
+      return {
+        session: closedSession,
+        table: updatedTable,
+      };
+    });
+
+    return {
+      message: 'Session closed. Table is now waiting for cleaning.',
+      session: result.session,
+      table: result.table,
+    };
   }
 }

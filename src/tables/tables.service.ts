@@ -57,4 +57,49 @@ export class TablesService {
       assistantMessage: `Your table ${result.table.number} is reserved for ${dto.partySize} guest(s). Please go to your table. You can start asking about the menu here.`,
     };
   }
+
+  async updateStatus(tableId: string, status: TableStatus) {
+    const table = await this.prisma.restaurantTable.findUnique({
+      where: { id: tableId },
+    });
+
+    if (!table) {
+      throw new NotFoundException('Table not found');
+    }
+
+    const updatedTable = await this.prisma.restaurantTable.update({
+      where: { id: tableId },
+      data: {
+        status,
+      },
+    });
+
+    return {
+      message: `Table status updated to ${status}`,
+      table: updatedTable,
+    };
+  }
+
+  async markCleaned(tableId: string) {
+    const table = await this.prisma.restaurantTable.findUnique({
+      where: { id: tableId },
+    });
+
+    if (!table) {
+      throw new NotFoundException('Table not found');
+    }
+
+    const updatedTable = await this.prisma.restaurantTable.update({
+      where: { id: tableId },
+      data: {
+        status: TableStatus.FREE,
+        currentSessionId: null,
+      },
+    });
+
+    return {
+      message: 'Table is now free',
+      table: updatedTable,
+    };
+  }
 }
