@@ -48,12 +48,28 @@ export class ChatService {
         content: message.content,
       }));
 
+      const currentOrder = await this.prisma.order.findFirst({
+        where: {
+          sessionId: session.id,
+          status: {
+            in: ['CONFIRMED', 'COOKING', 'READY'],
+          },
+        },
+        include: {
+          items: true,
+        },
+        orderBy: {
+          createdAt: 'desc',
+        },
+      });
+
     const aiResponse = await this.aiService.askWaiter({
       message: dto.message,
       tableNumber: session.table.number,
       partySize: session.partySize,
       history,
       menu,
+      currentOrder,
     });
 
     const answer =

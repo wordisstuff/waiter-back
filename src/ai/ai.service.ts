@@ -13,6 +13,7 @@ export class AiService {
     partySize: number;
     menu: any;
     history?: { role: 'user' | 'assistant'; content: string }[];
+    currentOrder?: any;
   }) {
     const response = await this.openai.responses.create({
       model: 'gpt-5-mini',
@@ -44,6 +45,10 @@ Rules:
 - if the customer mentions any dish from the menu, always include that dish id in recommendedItemIds
 - if the customer asks about ingredients, calories, allergens, appearance, photo, image, or "show me" for a dish, include that dish id in recommendedItemIds
 - if the customer asks for recommendations, include 1-3 suitable dish ids in recommendedItemIds
+- If currentOrder exists, use it when customer asks about bill, order, waiting time, status, or what they ordered.
+- If currentOrder exists, do not say there is no order.
+- If customer asks "what did I order?", list items from currentOrder.items.
+- If customer asks "how much should I pay?", use currentOrder.total.
 - never write imageUrl, file path, or image name in the answer text
 - the frontend will render dish cards automatically from recommendedItemIds
 - do not try to place an order unless the customer clearly says they want to order/add/confirm something
@@ -62,7 +67,9 @@ Rules:
 Customer message: ${data.message}
 Table number: ${data.tableNumber}
 Party size: ${data.partySize}
-          `,
+Current order:
+${data.currentOrder ? JSON.stringify(data.currentOrder) : 'No confirmed order'}
+`,
         },
       ],
     });
