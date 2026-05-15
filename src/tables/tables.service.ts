@@ -54,7 +54,7 @@ export class TablesService {
     return {
       sessionId: result.session.id,
       table: result.table,
-      assistantMessage: `Your table ${result.table.number} is reserved for ${dto.partySize} guest(s). Please go to your table. You can start asking about the menu here.`,
+      assistantMessage: `Готово ✨ Столик №${result.table.number} заброньовано для ${dto.partySize} гостей. Можете проходити до столика, а я допоможу з меню.`,
     };
   }
 
